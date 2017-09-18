@@ -30,7 +30,8 @@ public class ControlCameraActivity extends AppCompatActivity {
 
     private Camera.Size mPreviewSize;
 
-    private int cameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
+//    private int cameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
+    private int cameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +106,14 @@ public class ControlCameraActivity extends AppCompatActivity {
                     parameters.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
                     mSurface.requestLayout();
                     mCamera.setParameters(parameters);
+
+                    mCamera.setPreviewCallback(new Camera.PreviewCallback() {
+                        @Override
+                        public void onPreviewFrame(byte[] data, Camera camera) {
+                            Log.d(TAG, "onPreviewFrame: ");
+                        }
+                    });
+
                     mCamera.startPreview();
 
                 } catch (IOException e) {

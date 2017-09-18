@@ -7,6 +7,7 @@
         android:required="true"/>
 
     <uses-permission android:name="android.permission.CAMERA"/>
+
     <uses-feature android:name="android.hardware.camera.autofocus"/>
 
     <application
@@ -25,6 +26,8 @@
         <activity android:name=".RecordVideoSimplyActivity">
         </activity>
         <activity android:name=".ControlCameraActivity">
+        </activity>
+        <activity android:name=".GLSurfaceActivity">
         </activity>
     </application>
 

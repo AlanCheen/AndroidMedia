@@ -14,3 +14,8 @@ Y 亮度
 YUV420SP  YUV420 ARGB RGB 
 
 https://zh.wikipedia.org/zh/YUV
+
+
+
+
+在自己的线程调用美颜需要初始化一个 glcontext,而在 SurfaceView 的 render 线程 不需要。

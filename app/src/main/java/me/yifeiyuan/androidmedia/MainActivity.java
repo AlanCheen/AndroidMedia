@@ -27,4 +27,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ControlCameraActivity.class);
         startActivity(intent);
     }
+
+    public void glSurfaceView(View view) {
+        Intent intent = new Intent(this, GLSurfaceActivity.class);
+        startActivity(intent);
+    }
 }
