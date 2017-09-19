@@ -1,8 +1,10 @@
 package me.yifeiyuan.androidmedia;
 
 import android.app.Activity;
+import android.content.Context;
 import android.hardware.Camera;
 import android.view.Surface;
+import android.view.WindowManager;
 
 /**
  * Created by mingjue on 2017/8/31.
@@ -12,17 +14,17 @@ public class CameraUtil {
     /**
      * 修正 preview 的旋转问题
      *
-     * @param activity
+     * @param context
      * @param cameraId
      *  @see Camera.CameraInfo.CAMERA_FACING_FRONT
      *  @see Camera.CameraInfo.CAMERA_FACING_BACK
      * @param camera
      */
-    public static void setCameraDisplayOrientation(Activity activity,
+    public static void setCameraDisplayOrientation(Context context,
                                                    int cameraId, android.hardware.Camera camera) {
         android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
         android.hardware.Camera.getCameraInfo(cameraId, info);
-        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+        int rotation = ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
         int degrees = 0;
         switch (rotation) {
             case Surface.ROTATION_0:

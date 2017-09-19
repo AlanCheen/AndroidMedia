@@ -58,7 +58,7 @@ public class GLSurfaceActivity extends AppCompatActivity {
 //            gl.glClearColor(1f, 0f, 0f, 0f);
 //            GLES20.glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
             gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-            surfaceTexture = new SurfaceTexture(0);
+            surfaceTexture = new SurfaceTexture(1);
         }
 
         @Override

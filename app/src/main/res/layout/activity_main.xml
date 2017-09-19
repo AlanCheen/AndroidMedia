@@ -33,5 +33,19 @@
         android:onClick="glSurfaceView"
         />
 
+    <Button
+        android:text="controlCamera Preview Test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="controlCameraPreview"
+        />
+    <Button
+        android:text="gameDisplay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="gameDisplay"
+        />
+
+
 
 </LinearLayout>

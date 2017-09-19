@@ -32,4 +32,14 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, GLSurfaceActivity.class);
         startActivity(intent);
     }
+
+    public void controlCameraPreview(View view) {
+        Intent intent = new Intent(this, ControlPreviewActivity.class);
+        startActivity(intent);
+    }
+
+    public void gameDisplay(View view) {
+        Intent intent = new Intent(this, GameDisplayActivity.class);
+        startActivity(intent);
+    }
 }
