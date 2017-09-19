@@ -77,11 +77,11 @@ public class GLSurfaceActivity extends AppCompatActivity {
                     mPreviewSize = mSupportedPreviewSizes.get(0);// h 1080 w 1920
 
                     mCamera.setPreviewTexture(surfaceTexture);
-                    Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
-                    Camera.getCameraInfo(cameraId, cameraInfo);
-                    int orientation = cameraInfo.orientation;//0 90 180 270
+//                    Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+//                    Camera.getCameraInfo(cameraId, cameraInfo);
+//                    int orientation = cameraInfo.orientation;//0 90 180 270
 
-                    ControlCameraActivity.setCameraDisplayOrientation(GLSurfaceActivity.this, cameraId, mCamera);
+                    CameraUtil.setCameraDisplayOrientation(GLSurfaceActivity.this, cameraId, mCamera);
 
                     Camera.Parameters parameters = mCamera.getParameters();
                     parameters.setPreviewSize(mPreviewSize.width, mPreviewSize.height);

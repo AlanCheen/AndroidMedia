@@ -2,6 +2,8 @@ package me.yifeiyuan.androidmedia;
 
 import android.content.Context;
 import android.hardware.Camera;
+import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.Surface;
 import android.view.WindowManager;
 
@@ -12,29 +14,51 @@ import java.util.List;
  */
 public class CameraManager {
 
+    private static final String TAG = "CameraManager";
+
     private Camera mCamera;
 
     private final Object mLock = new Object();
 
-    private static final CameraManager instance = new CameraManager();
+    private static CameraManager sInstance;
 
     //默认后置摄像头
     private int mCameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
 
-    private CameraManager() {
+    private int mOrientation = 90;//default
+
+    /**
+     * 拍照尺寸
+     */
+    public Camera.Size mCameraPictureSize;
+
+    private CameraManager() {}
+
+    public static CameraManager getInstance() {
+        if (sInstance == null) {
+            synchronized (CameraManager.class) {
+                if (sInstance == null) {
+                    sInstance = new CameraManager();
+                }
+            }
+        }
+        return sInstance;
     }
 
-    public static CameraManager instance() {
-        return instance;
-    }
-
-    public Camera getCamera() {
+    public @Nullable Camera getCamera() {
         return mCamera;
     }
 
-    public CameraManager setCameraId(int mCameraId) {
-        this.mCameraId = mCameraId;
-        return instance;
+    /**
+     * @param cameraId
+     * @see Camera.CameraInfo.CAMERA_FACING_BACK
+     * @see Camera.CameraInfo.CAMERA_FACING_FRONT
+     *
+     * @return
+     */
+    public CameraManager setCameraId(int cameraId) {
+        this.mCameraId = cameraId;
+        return sInstance;
     }
 
     public int getCameraId() {
@@ -51,23 +75,34 @@ public class CameraManager {
                 } else {
                     mCamera = Camera.open();
                 }
-                setCameraDisplayOrientation(context, mCameraId, mCamera);
+                mOrientation = setCameraDisplayOrientation(context, mCameraId, mCamera);
+
+                Camera.Parameters parameters = mCamera.getParameters();
+
+                List<Camera.Size> previewSizes = parameters.getSupportedPreviewSizes();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return instance;
+        return sInstance;
     }
 
-    private void release() {
+    public void release() {
         synchronized (mLock) {
             if (mCamera != null) {
+                mCamera.setPreviewCallback(null);
+                mCamera.stopPreview();
                 mCamera.release();
                 mCamera = null;
             }
         }
     }
 
+    /**
+     * call open first
+     * @param enable 是否开启
+     * @return
+     */
     public CameraManager switchFlash(boolean enable) {
         synchronized (mLock) {
             if (mCamera != null) {
@@ -76,7 +111,7 @@ public class CameraManager {
                 List<String> modes = parameters.getSupportedFlashModes();
 
                 if (enable) {
-                    //on
+                    //turn on
                     String mode = findMatch(modes, Camera.Parameters.FLASH_MODE_TORCH,
                             Camera.Parameters.FLASH_MODE_ON,
                             Camera.Parameters.FLASH_MODE_RED_EYE,
@@ -86,7 +121,7 @@ public class CameraManager {
                         mCamera.setParameters(parameters);
                     }
                 } else {
-                    // off
+                    // turn off
                     String mode = findMatch(modes, Camera.Parameters.FLASH_MODE_OFF,
                             Camera.Parameters.FLASH_MODE_AUTO);
                     if (null != mode) {
@@ -94,12 +129,23 @@ public class CameraManager {
                         mCamera.setParameters(parameters);
                     }
                 }
+            }else{
+                Log.e(TAG, "switchFlash: camera is null,call open first");
             }
         }
-        return instance;
+        return sInstance;
     }
 
-    public String findMatch(List<String> list, String... target) {
+    public CameraManager setPreviewCallback(Camera.PreviewCallback callback) {
+        synchronized (mLock) {
+            if (mCamera != null) {
+                mCamera.setPreviewCallback(callback);
+            }
+        }
+        return sInstance;
+    }
+
+    private String findMatch(List<String> list, String... target) {
         if (null == list) {
             return null;
         }
@@ -115,15 +161,19 @@ public class CameraManager {
         synchronized (mLock) {
             if (null != mCamera) {
                 mCamera.startPreview();
+            }else{
+                Log.e(TAG, "startPreview: camera is null,call open first");
             }
         }
-        return instance;
+        return sInstance;
     }
 
+    public void setupPreviewSize(Camera camera){
+
+    }
 
     void setting() {
         Camera.Parameters parameters = mCamera.getParameters();
-
     }
 
 
@@ -135,7 +185,8 @@ public class CameraManager {
      * @return orientation
      */
     public static int setCameraDisplayOrientation(Context context,
-                                                  int cameraId, android.hardware.Camera camera) {
+                                                  int cameraId,
+                                                  android.hardware.Camera camera) {
 
         if (null == context || null == camera) {
             return -1;
@@ -167,7 +218,6 @@ public class CameraManager {
             result = (info.orientation - degrees + 360) % 360;
         }
         camera.setDisplayOrientation(result);
-
         return result;
     }
 }
