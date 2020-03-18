@@ -51,7 +51,7 @@ public class ControlPreviewActivity extends AppCompatActivity implements Surface
         } else {
             mSurfaceTexture = new SurfaceTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES);
         }
-//        mSurfaceTexture.setOnFrameAvailableListener(this);
+        mSurfaceTexture.setOnFrameAvailableListener(this);
         mCallback = new HolderCallback();
 
         mHolder = mSurfaceView.getHolder();//SurfaceView$4
@@ -209,7 +209,7 @@ public class ControlPreviewActivity extends AppCompatActivity implements Surface
     int raids = 1;
 
     private void draw(byte[] data, Camera camera) {
-        Log.d(TAG, "draw()data = [" + data);
+//        Log.d(TAG, "draw()data = [" + data);
         synchronized (mHolder) {
             Canvas canvas = null;
             try {

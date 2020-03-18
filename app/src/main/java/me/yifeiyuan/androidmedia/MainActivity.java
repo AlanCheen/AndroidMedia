@@ -42,4 +42,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, GameDisplayActivity.class);
         startActivity(intent);
     }
+
+    public void goVideoView(View view) {
+        Intent intent = new Intent(this, VideoViewActivity.class);
+        startActivity(intent);
+    }
 }
